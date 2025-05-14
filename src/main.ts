@@ -34,8 +34,13 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* Custom Material Design Styles */
+import './theme/custom.css';
+
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    mode: 'md' // Force Material Design mode
+  })
   .use(router);
 
 router.isReady().then(() => {

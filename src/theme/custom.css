@@ -1,0 +1,322 @@
+/* Material Design Custom Styles */
+
+/* Elevation (shadows) */
+.md-elevation-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.md-elevation-2 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.md-elevation-3 {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* Container system for better sizing and spacing */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tablet sized screens */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+    padding: 0;
+  }
+}
+
+/* Desktop sized screens */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Card styles */
+ion-card {
+  border-radius: var(--ion-card-border-radius);
+  margin: 16px;
+  box-shadow: var(--ion-card-box-shadow);
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Center cards on larger screens */
+@media (min-width: 768px) {
+  ion-card {
+    width: 100%;
+    max-width: 720px;
+    margin: 16px auto;
+  }
+}
+
+ion-card-header {
+  padding: 16px 16px 8px;
+}
+
+ion-card-content {
+  padding: 8px 16px 16px;
+}
+
+/* Task Item styles */
+.task-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --background: #ffffff;
+  margin-bottom: 2px;
+}
+
+.task-list-container {
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .task-list-container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+.task-item h2 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+  margin: 0 0 4px 0;
+}
+
+.task-item p {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.task-item ion-note {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+/* Buttons */
+ion-button {
+  --box-shadow: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+ion-button.button-solid {
+  --border-radius: 4px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+
+ion-fab-button {
+  --box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Date selectors */
+.date-container {
+  padding: 16px;
+  background-color: var(--ion-color-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .date-container {
+    max-width: 720px;
+    margin: 8px auto;
+    border-radius: 8px;
+  }
+}
+
+.date-container h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+/* Week selector */
+.week-selector {
+  padding: 16px;
+  background-color: var(--ion-color-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .week-selector {
+    max-width: 720px;
+    margin: 8px auto;
+    border-radius: 8px;
+  }
+}
+
+.week-selector h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+}
+
+/* Task Detail Styles */
+.section-title {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--ion-color-primary);
+}
+
+ion-chip {
+  font-weight: 500;
+}
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .empty-state {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: var(--ion-color-medium);
+  margin-bottom: 20px;
+}
+
+/* Form styles */
+ion-input, ion-textarea {
+  --padding-start: 0;
+  margin-top: 8px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+ion-datetime {
+  --background: #ffffff;
+}
+
+/* Calendar styles */
+.calendar-container {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.calendar-card {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  height: calc(100% - 56px);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .calendar-card {
+    margin: 16px auto;
+    max-width: 720px;
+    border-radius: 8px;
+    height: calc(100% - 88px);
+  }
+}
+
+/* Task status styling */
+.vuecal__event.task-completed {
+  background-color: rgba(76, 175, 80, 0.15);
+  border-left: 3px solid var(--ion-color-success);
+}
+
+.vuecal__event.task-pending {
+  background-color: rgba(63, 81, 181, 0.15);
+  border-left: 3px solid var(--ion-color-primary);
+}
+
+/* Mobile optimizations */
+@media (max-width: 576px) {
+  ion-card {
+    margin: 12px;
+  }
+  
+  .date-container,
+  .week-selector {
+    padding: 12px;
+  }
+  
+  .date-container h3,
+  .week-selector h3 {
+    font-size: 16px;
+  }
+  
+  ion-item {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
+
+/* Ensure touch targets are appropriate size */
+ion-button,
+ion-item,
+ion-checkbox,
+ion-toggle {
+  --min-height: 48px;
+}
+
+ion-back-button::part(text) {
+  display: none;
+}
+
+/* Content with proper padding across devices */
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+@media (min-width: 768px) {
+  ion-content {
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+} 

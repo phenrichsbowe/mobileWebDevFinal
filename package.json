@@ -12,15 +12,19 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@capacitor/android": "^7.2.0",
     "@capacitor/app": "7.0.1",
     "@capacitor/core": "7.2.0",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/keyboard": "7.0.1",
+    "@capacitor/local-notifications": "^7.0.1",
+    "@capacitor/preferences": "^7.0.1",
     "@capacitor/status-bar": "7.0.1",
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",
     "ionicons": "^7.0.0",
     "vue": "^3.3.0",
+    "vue-cal": "^4.10.2",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
