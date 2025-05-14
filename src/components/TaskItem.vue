@@ -1,11 +1,17 @@
 <template>
-  <ion-item :class="['task-item', { 'task-completed': task.completed }]">
+  <ion-item :class="['task-item', { 'task-completed': isCompleted }]">
     <ion-checkbox slot="start" 
-                 :checked="task.completed" 
-                 @ion-change="toggleComplete()"
-                 aria-label="Task completion"></ion-checkbox>
+                :checked="isCompleted" 
+                @ion-change="toggleComplete()"
+                aria-label="Task completion"></ion-checkbox>
     <ion-label>
-      <h2>{{ task.title }}</h2>
+      <h2>
+        {{ task.title }}
+        <ion-badge v-if="task.reminderSet && !isCompleted" color="secondary" class="reminder-badge">
+          <ion-icon :icon="notificationsOutline" size="small"></ion-icon>
+          Reminder
+        </ion-badge>
+      </h2>
       <p class="ion-text-wrap task-description">{{ task.description }}</p>
       <p><ion-note>{{ formattedDate }}</ion-note></p>
     </ion-label>
@@ -21,16 +27,16 @@
 </template>
 
 <script lang="ts">
-import { PropType, computed } from 'vue';
+import { PropType, computed, ref, watch } from 'vue';
 import { defineComponent } from 'vue';
-import { IonItem, IonLabel, IonCheckbox, IonNote, IonButtons, IonButton, IonIcon } from '@ionic/vue';
-import { createOutline, trashOutline } from 'ionicons/icons';
+import { IonItem, IonLabel, IonCheckbox, IonNote, IonButtons, IonButton, IonIcon, IonBadge } from '@ionic/vue';
+import { createOutline, trashOutline, notificationsOutline } from 'ionicons/icons';
 import { Task } from '@/models/Task';
 import TaskService from '@/services/TaskService';
 
 export default defineComponent({
   name: 'TaskItem',
-  components: { IonItem, IonLabel, IonCheckbox, IonNote, IonButtons, IonButton, IonIcon },
+  components: { IonItem, IonLabel, IonCheckbox, IonNote, IonButtons, IonButton, IonIcon, IonBadge },
   props: {
     task: {
       type: Object as PropType<Task>,
@@ -39,6 +45,12 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const taskService = TaskService.getInstance();
+    const isCompleted = ref(props.task.completed);
+    
+    // Keep local state in sync with prop changes
+    watch(() => props.task.completed, (newValue) => {
+      isCompleted.value = newValue;
+    });
     
     const formattedDate = computed(() => {
       const date = new Date(props.task.dueDate);
@@ -52,6 +64,8 @@ export default defineComponent({
     
     const toggleComplete = async () => {
       await taskService.toggleTaskCompletion(props.task.id);
+      // Update local reactive state immediately
+      isCompleted.value = !isCompleted.value;
       emit('task-updated');
     };
     
@@ -64,12 +78,14 @@ export default defineComponent({
     };
     
     return {
+      isCompleted,
       formattedDate,
       toggleComplete,
       editTask,
       deleteTask,
       createOutline,
-      trashOutline
+      trashOutline,
+      notificationsOutline
     };
   }
 });
@@ -88,7 +104,21 @@ export default defineComponent({
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.reminder-badge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
 }
 
 ion-checkbox {

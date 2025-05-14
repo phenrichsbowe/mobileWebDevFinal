@@ -23,6 +23,7 @@
       
       <ion-card class="calendar-card md-elevation-1">
         <task-calendar 
+          ref="calendar"
           :selected-date="weekStartDate" 
           @task-selected="onTaskSelected"
         />
@@ -38,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { defineComponent } from 'vue';
 import { onIonViewDidEnter,
   IonPage,
@@ -51,15 +52,14 @@ import { onIonViewDidEnter,
   IonIcon,
   IonFab,
   IonFabButton,
+  IonCard,
   modalController,
-  alertController,
   useIonRouter
 } from '@ionic/vue';
 import { addOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 import TaskCalendar from '@/components/TaskCalendar.vue';
 import TaskForm from '@/components/TaskForm.vue';
 import TaskService from '@/services/TaskService';
-import { Task } from '@/models/Task';
 
 export default defineComponent({
   name: 'WeeklyTasksPage',
@@ -74,12 +74,14 @@ export default defineComponent({
     IonIcon,
     IonFab,
     IonFabButton,
+    IonCard,
     TaskCalendar
   },
   setup() {
     const weekStartDate = ref(getStartOfWeek(new Date()));
     const taskService = TaskService.getInstance();
     const router = useIonRouter();
+    const calendar = ref(null);
     
     // Get the start of the week (Sunday)
     function getStartOfWeek(date: Date): Date {
@@ -114,20 +116,31 @@ export default defineComponent({
       const newStartDate = new Date(weekStartDate.value);
       newStartDate.setDate(newStartDate.getDate() - 7);
       weekStartDate.value = newStartDate;
+      console.log('Navigated to previous week:', newStartDate.toISOString());
     };
     
     const nextWeek = () => {
       const newStartDate = new Date(weekStartDate.value);
       newStartDate.setDate(newStartDate.getDate() + 7);
       weekStartDate.value = newStartDate;
+      console.log('Navigated to next week:', newStartDate.toISOString());
     };
     
     const openNewTaskModal = async () => {
+      // Use current week's middle day (Wednesday) as default
+      const dateForTask = new Date(weekStartDate.value);
+      dateForTask.setDate(dateForTask.getDate() + 3); // Wednesday of current week
+      dateForTask.setHours(12, 0, 0, 0); // Set to noon
+      
+      console.log('Opening task modal with date:', dateForTask.toISOString());
+      
       const modal = await modalController.create({
         component: TaskForm,
         componentProps: {
-          initialDueDate: new Date().toISOString()
-        }
+          initialDueDate: dateForTask.toISOString()
+        },
+        backdropDismiss: false,
+        animated: true
       });
       
       modal.onDidDismiss().then(({ data }) => {
@@ -148,6 +161,13 @@ export default defineComponent({
         taskData.dueDate,
         taskData.reminderSet
       );
+      
+      // Refresh the calendar after adding a task
+      if (calendar.value && 'refreshCalendar' in calendar.value) {
+        setTimeout(async () => {
+          await (calendar.value as any).refreshCalendar();
+        }, 300);
+      }
     };
     
     const onTaskSelected = async (taskId: string) => {
@@ -158,7 +178,17 @@ export default defineComponent({
     };
     
     onIonViewDidEnter(() => {
-      // Calendar component will handle loading tasks
+      // Refresh calendar on re-entering the view
+      if (calendar.value && 'refreshCalendar' in calendar.value) {
+        (calendar.value as any).refreshCalendar();
+      }
+    });
+    
+    // Initial setup
+    onMounted(() => {
+      if (calendar.value && 'refreshCalendar' in calendar.value) {
+        (calendar.value as any).refreshCalendar();
+      }
     });
     
     return {
@@ -170,7 +200,8 @@ export default defineComponent({
       onTaskSelected,
       addOutline,
       chevronBackOutline,
-      chevronForwardOutline
+      chevronForwardOutline,
+      calendar
     };
   }
 });
@@ -197,12 +228,50 @@ ion-fab {
 }
 
 .week-selector {
-  margin-bottom: 8px;
+  padding: 12px;
+  background-color: var(--ion-color-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 8px 12px 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.week-selector h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.calendar-card {
+  margin: 0 8px 16px 8px;
+  padding: 0;
+  height: calc(100% - 90px);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 768px) {
   ion-content {
     --background: #f0f0f0;
+  }
+
+  .week-selector {
+    max-width: 720px;
+    margin: 12px auto;
+    padding: 16px;
+  }
+
+  .week-selector h3 {
+    font-size: 18px;
+  }
+
+  .calendar-card {
+    max-width: 720px;
+    margin: 0 auto 24px auto;
+    height: calc(100% - 100px);
   }
 }
 </style> 

@@ -319,4 +319,113 @@ ion-content {
     --padding-start: 16px;
     --padding-end: 16px;
   }
+}
+
+/* Modal styles */
+.centered-modal {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --max-height: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --backdrop-opacity: 0.6;
+}
+
+.centered-modal::part(content) {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .centered-modal {
+    --width: 400px;
+  }
+}
+
+/* Theme transition */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+ion-toolbar,
+ion-content,
+ion-item,
+ion-card,
+ion-tab-bar,
+ion-list,
+ion-modal,
+ion-header,
+ion-footer,
+ion-button,
+ion-toggle,
+ion-checkbox,
+ion-radio,
+ion-input,
+ion-textarea,
+ion-label,
+.vuecal__event {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Add explicit dark mode handlers for the calendar */
+body.dark .vuecal__event.task-pending {
+  background-color: rgba(138, 180, 248, 0.25) !important;
+  border-left: 4px solid var(--ion-color-primary) !important;
+}
+
+body.dark .vuecal__event.task-completed {
+  background-color: rgba(100, 255, 218, 0.25) !important;
+  border-left: 4px solid var(--ion-color-secondary) !important;
+}
+
+body.dark .vuecal__time-column {
+  background-color: #2a2a2a !important;
+}
+
+body.dark .vuecal__heading, 
+body.dark .vuecal__title,
+body.dark .vuecal__cell {
+  color: var(--ion-text-color) !important;
+}
+
+body.dark .vuecal {
+  background-color: #303134 !important;
+}
+
+body.dark .vuecal__cell {
+  background-color: #323438 !important;
+}
+
+body.dark .vuecal__cell--today {
+  background-color: rgba(138, 180, 248, 0.15) !important;
+}
+
+body.dark .vuecal__cell--selected {
+  background-color: rgba(138, 180, 248, 0.3) !important;
+}
+
+body.dark .vuecal__weekdays-headings {
+  border-bottom: 1px solid #444 !important;
+}
+
+body.dark .vuecal__header {
+  background-color: #2a2a2a !important;
+}
+
+body.dark .vuecal__menu, 
+body.dark .vuecal__view-btn {
+  color: #e8eaed !important;
+  background-color: #2a2a2a !important;
+}
+
+body.dark .vuecal__view-btn--active {
+  background-color: #444 !important;
+  border-color: #555 !important;
+}
+
+/* Ensure button isn't hidden in dark mode */
+body.dark ion-button {
+  --color: var(--ion-color-primary);
 } 

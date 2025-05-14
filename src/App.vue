@@ -22,6 +22,55 @@ export default defineComponent({
     onMounted(async () => {
       console.log('App initialized');
       
+      // Initialize theme
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      // Check if user has manually set theme preference
+      try {
+        const { value } = await Preferences.get({ key: 'theme-preference' });
+        console.log('App: Retrieved theme preference:', value);
+        
+        if (value === 'dark') {
+          console.log('App: Applying dark theme from stored preference');
+          document.body.classList.add('dark');
+          document.body.classList.remove('light');
+        } else if (value === 'light') {
+          console.log('App: Applying light theme from stored preference');
+          document.body.classList.remove('dark');
+          document.body.classList.add('light');
+        } else if (prefersDark.matches) {
+          // If no preference saved but system is dark, use dark mode
+          console.log('App: No stored preference, using system dark mode');
+          document.body.classList.add('dark');
+          document.body.classList.remove('light');
+          // Save this preference
+          await Preferences.set({
+            key: 'theme-preference',
+            value: 'dark'
+          });
+        } else {
+          // Explicitly set light mode if no preference and system is light
+          console.log('App: No stored preference, using light mode');
+          document.body.classList.remove('dark');
+          document.body.classList.add('light');
+          // Save this preference
+          await Preferences.set({
+            key: 'theme-preference', 
+            value: 'light'
+          });
+        }
+      } catch (error) {
+        console.error('Error getting theme preference:', error);
+        // Fallback to system preference
+        if (prefersDark.matches) {
+          document.body.classList.add('dark');
+          document.body.classList.remove('light');
+        } else {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light');
+        }
+      }
+      
       // Initialize permissions for notifications
       try {
         console.log('Requesting notification permissions');

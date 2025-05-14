@@ -76,7 +76,9 @@ import { onIonViewDidEnter,
   IonModal,
   IonDatetime,
   modalController,
-  alertController
+  alertController,
+  IonFab,
+  IonFabButton
 } from '@ionic/vue';
 import { calendarOutline, chevronBackOutline, chevronForwardOutline, addOutline } from 'ionicons/icons';
 import TaskItem from '@/components/TaskItem.vue';
@@ -98,6 +100,8 @@ export default defineComponent({
     IonIcon,
     IonModal,
     IonDatetime,
+    IonFab,
+    IonFabButton,
     TaskItem
   },
   setup() {
@@ -145,11 +149,16 @@ export default defineComponent({
     };
     
     const openNewTaskModal = async () => {
+      const dateForTask = new Date(selectedDate.value);
+      dateForTask.setHours(12, 0, 0, 0);
+      
       const modal = await modalController.create({
         component: TaskForm,
         componentProps: {
-          initialDueDate: selectedDateString.value
-        }
+          initialDueDate: dateForTask.toISOString()
+        },
+        backdropDismiss: false,
+        animated: true
       });
       
       modal.onDidDismiss().then(({ data }) => {
@@ -166,7 +175,9 @@ export default defineComponent({
         component: TaskForm,
         componentProps: {
           task
-        }
+        },
+        backdropDismiss: false,
+        animated: true
       });
       
       modal.onDidDismiss().then(({ data }) => {
@@ -181,12 +192,15 @@ export default defineComponent({
     const handleSaveTask = async (taskData: any) => {
       if (!taskData) return;
       
+      console.log('Creating task with date:', taskData.dueDate);
+      
       await taskService.addTask(
         taskData.title,
         taskData.description,
         taskData.dueDate,
         taskData.reminderSet
       );
+      
       await loadDailyTasks();
     };
     

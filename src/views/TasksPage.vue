@@ -58,7 +58,9 @@ import { onIonViewDidEnter,
   IonRefresher,
   IonRefresherContent,
   modalController,
-  alertController
+  alertController,
+  IonFab,
+  IonFabButton
 } from '@ionic/vue';
 import { addOutline } from 'ionicons/icons';
 import TaskItem from '@/components/TaskItem.vue';
@@ -80,6 +82,8 @@ export default defineComponent({
     IonIcon,
     IonRefresher,
     IonRefresherContent,
+    IonFab,
+    IonFabButton,
     TaskItem
   },
   setup() {
@@ -99,7 +103,9 @@ export default defineComponent({
     
     const openNewTaskModal = async () => {
       const modal = await modalController.create({
-        component: TaskForm
+        component: TaskForm,
+        backdropDismiss: false,
+        animated: true
       });
       
       modal.onDidDismiss().then(({ data }) => {
@@ -116,7 +122,9 @@ export default defineComponent({
         component: TaskForm,
         componentProps: {
           task
-        }
+        },
+        backdropDismiss: false,
+        animated: true
       });
       
       modal.onDidDismiss().then(({ data }) => {
@@ -130,6 +138,7 @@ export default defineComponent({
     
     const handleSaveTask = async (taskData: any) => {
       console.log('Task data received:', taskData);
+
       if (!taskData) {
         console.error('No task data received');
         return;

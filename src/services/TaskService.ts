@@ -67,12 +67,21 @@ export default class TaskService {
 
   public async getDailyTasks(date: Date): Promise<Task[]> {
     await this.init();
-    const dateString = date.toISOString().split('T')[0];
+    console.log('Getting daily tasks for date:', date.toISOString());
     
-    return this.tasks.filter(task => {
+    // Normalize the date by removing time component
+    const dateString = date.toISOString().split('T')[0];
+    console.log('Normalized date string:', dateString);
+    
+    const filteredTasks = this.tasks.filter(task => {
       const taskDate = new Date(task.dueDate).toISOString().split('T')[0];
-      return taskDate === dateString;
+      const matches = taskDate === dateString;
+      console.log(`Task ${task.id} date: ${taskDate}, matches: ${matches}`);
+      return matches;
     });
+    
+    console.log(`Found ${filteredTasks.length} tasks for ${dateString}`);
+    return filteredTasks;
   }
 
   public async getWeeklyTasks(startDate: Date): Promise<Task[]> {

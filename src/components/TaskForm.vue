@@ -1,61 +1,63 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button @click="dismiss()" fill="clear">Cancel</ion-button>
-      </ion-buttons>
-      <ion-title>{{ isEdit ? 'Edit Task' : 'New Task' }}</ion-title>
-      <ion-buttons slot="end">
-        <ion-button :strong="true" @click="save()" :disabled="!isFormValid" color="primary" fill="clear">Save</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list class="form-list">
-      <ion-item>
-        <ion-input
-          label="Title"
-          labelPlacement="stacked"
-          placeholder="Task title"
-          v-model="title"
-          required
-          class="form-input"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-textarea
-          label="Description"
-          labelPlacement="stacked"
-          placeholder="Task description"
-          v-model="description"
-          :rows="4"
-          class="form-input"
-        ></ion-textarea>
-      </ion-item>
-      <ion-item class="datetime-item">
-        <ion-label position="stacked">Due Date</ion-label>
-        <ion-datetime-button datetime="datetime" class="datetime-button"></ion-datetime-button>
-        <ion-modal :keep-contents-mounted="true">
-          <ion-datetime
-            id="datetime"
-            presentation="date-time"
-            v-model="dueDate"
-            first-day-of-week="1"
-          ></ion-datetime>
-        </ion-modal>
-      </ion-item>
-      <ion-item>
-        <ion-label>Set Reminder</ion-label>
-        <ion-toggle v-model="reminderSet"></ion-toggle>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ isEdit ? 'Edit Task' : 'New Task' }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-list class="form-list">
+        <ion-item>
+          <ion-input
+            label="Title"
+            labelPlacement="stacked"
+            placeholder="Task title"
+            v-model="title"
+            required
+            class="form-input"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-textarea
+            label="Description"
+            labelPlacement="stacked"
+            placeholder="Task description"
+            v-model="description"
+            :rows="4"
+            class="form-input"
+          ></ion-textarea>
+        </ion-item>
+        <ion-item class="datetime-item">
+          <ion-label position="stacked">Due Date</ion-label>
+          <ion-datetime-button datetime="datetime" class="datetime-button"></ion-datetime-button>
+          <ion-modal :keep-contents-mounted="true">
+            <ion-datetime
+              id="datetime"
+              presentation="date-time"
+              v-model="dueDate"
+              first-day-of-week="1"
+            ></ion-datetime>
+          </ion-modal>
+        </ion-item>
+        <ion-item>
+          <ion-label>Set Reminder</ion-label>
+          <ion-toggle v-model="reminderSet"></ion-toggle>
+        </ion-item>
+      </ion-list>
+      
+      <div class="button-container">
+        <ion-button color="medium" expand="block" @click="dismiss()">Cancel</ion-button>
+        <ion-button color="primary" expand="block" @click="save()" :disabled="!isFormValid">Save</ion-button>
+      </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script lang="ts">
 import { PropType, ref, computed, onMounted } from 'vue';
 import { defineComponent } from 'vue';
 import {
+  IonPage,
   IonHeader,
   IonToolbar,
   IonTitle,
@@ -65,7 +67,6 @@ import {
   IonInput,
   IonTextarea,
   IonLabel,
-  IonButtons,
   IonButton,
   IonToggle,
   IonDatetimeButton,
@@ -78,6 +79,7 @@ import { Task } from '@/models/Task';
 export default defineComponent({
   name: 'TaskForm',
   components: {
+    IonPage,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -87,7 +89,6 @@ export default defineComponent({
     IonInput,
     IonTextarea,
     IonLabel,
-    IonButtons,
     IonButton,
     IonToggle,
     IonDatetimeButton,
@@ -104,7 +105,7 @@ export default defineComponent({
       default: () => new Date().toISOString()
     }
   },
-  setup(props, { emit }) {
+  setup(props) {
     const title = ref('');
     const description = ref('');
     const dueDate = ref(props.initialDueDate);
@@ -155,25 +156,59 @@ export default defineComponent({
 </script>
 
 <style scoped>
+:host {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --max-height: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
 ion-toolbar {
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-primary-contrast);
+  --background: var(--ion-background-color);
+  --color: var(--ion-text-color);
+  --border-color: var(--ion-border-color);
+  --border-width: 0 0 1px 0;
+  --border-style: solid;
 }
 
 ion-title {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 ion-content {
   --background: #f5f5f5;
 }
 
+.task-form-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .form-list {
   background: #ffffff;
-  border-radius: 8px;
-  margin-bottom: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
   padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.button-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+
+ion-button {
+  margin: 0;
+  --border-radius: 10px;
+  --box-shadow: none;
+  flex: 1;
 }
 
 ion-item {
